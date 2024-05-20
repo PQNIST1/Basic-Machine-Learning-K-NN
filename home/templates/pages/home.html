@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="{% static 'home/style.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <span class="big-circle"></span>
+      <img src="img/shape.png" class="square" alt="" />
+      <div class="form">
+        <div class="contact-info">
+          <h3 class="title">Kết Quả Dự Đoán</h3>
+          <p class="text">
+            Khách Hàng Thuộc Phân Khúc: {{ c_predict }}
+          </p>
+          <div class="social-media">
+            <p>Điểm Tiêu Dùng Dự Đoán : {{ d_predict }}</p>
+          </div>
+          <div class="info">
+            <table>
+                <thead>
+                  <tr>
+                    <th>Tuổi</th>
+                    <th>Thu nhập (K$)</th>
+                    <th>Điểm Tiêu dùng</th>
+                    <th>Giới tính</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for customer_info in similar_customers_info %}
+                    <tr>
+                      <td>{{ customer_info.age }}</td>
+                      <td>{{ customer_info.income }}</td>
+                      <td>{{ customer_info.spending_score }}</td>
+                      <td>{{ customer_info.gender }}</td>
+                    </tr>
+                  {% endfor %}
+                  <!-- Thêm các hàng khác nếu cần -->
+                </tbody>
+              </table>              
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <span class="circle one"></span>
+          <span class="circle two"></span>
+
+          <form action="{% url 'predict' %}" method="POST"  >
+            {% csrf_token %}
+            <h3 class="title">Dự Đoán Khách Hàng</h3>
+            <div class="input-container">
+              <input type="number" name="age" class="input" required/>
+              <label for="age">Tuổi</label>
+              <span>Tuổi</span>
+            </div>
+            <div class="input-container">
+              <input type="number" name="salary" class="input" required/>
+              <label for="salary">Thu Nhập (K$)</label>
+              <span>Thu Nhập (K$)</span>
+            </div>
+            <div class="input-container">
+                <input type="number" name="customer" class="input"required/>
+                <label for="customer">Khách Hàng Tương Tự</label>
+                <span>Khách Hàng Tương Tự</span>
+              </div>
+              <div class="input-container">
+                <label for="gender">Giới Tính</label>
+                <span>Giới Tính</span>
+                <select name="gender" class="input" required>
+                  <option value="none"></option>
+                  <option value="Female">Nữ</option>
+                  <option value="Male">Nam</option>
+                  <!-- Thêm các option khác nếu cần -->
+                </select>
+              </div>
+              
+            <input type="submit" value="Send" class="btn" />
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'homejs/app.js' %}"></script>
+  </body>
+</html>
